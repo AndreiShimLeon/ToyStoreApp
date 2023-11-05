@@ -30,7 +30,11 @@ public class Messages {
         public static String inputChance = "Введите шанс выпадения игрушки: ";
         public static String inputToyName = "Введите название игрушки: ";
         public static String successAddingToy = "Игрушка успешно добавлена в список для розыгрыша.";
+        public static String successSavedResults = "Результаты розыгрыша успешно записаны в файл.";
+        public static String successDeletedResults = "Результаты розыгрыша успешно удалены.";
+        public static String successClearedFile = "Файл с результатами успешно очищен.";
         public static String clearedInventory = "Список игрушек для розыгрыша был успешно очищен.";
+        public static String emptyInventory = "Список игрушек для розыгрыша пуст.";
         public static String correctId = "Введите ID игрушки для редактирования: ";
         public static String correctName = "Введите новое имя игрушки: ";
         public static String correctChance = "Введите новый шанс выпадения игрушки: ";

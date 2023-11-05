@@ -1,5 +1,7 @@
 package model;
 
+import model.Exceptions.NotEnoughToys;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,10 +12,25 @@ public class ToyDrawing<T extends Toy> {
     private PriorityQueue<T> drawQueue;
     private ArrayList<T> inventory;
 
+    private String results;
+
+    public String getResults() {
+        return results;
+    }
+
+    public void setResults(T winnerToy) {
+        if (results == null) {
+            this.results = winnerToy.getName() + '\n';
+        } else {
+            this.results += winnerToy.getName() + '\n';
+        }
+    }
+
     public ToyDrawing(ArrayList<T> inventory) {
         this.drawQueue = new PriorityQueue<>();
         this.inventory = inventory;
     }
+
     public ToyDrawing() {
         this.drawQueue = new PriorityQueue<>();
         this.inventory = new ArrayList<>();
@@ -24,7 +41,8 @@ public class ToyDrawing<T extends Toy> {
      * Таким образом, очередь может быть как пустой, так и полностью заполненной.
      * Если очередь пустая, метод перезапускается.
      */
-    public void setDrawing() {
+    public void setDrawing() throws NotEnoughToys {
+        if(inventory.size()<3) throw new NotEnoughToys();
         int totalChance = 0;
         int lowerDrawLimit = 0;
         int upperDrawLimit = lowerDrawLimit;
@@ -53,6 +71,7 @@ public class ToyDrawing<T extends Toy> {
      * Метод возвращает имя Игрушки из очереди.
      * Возвращается игрушка с наибольшим весом chance.
      * После происходит очистка очереди.
+     *
      * @return возвращает имя Игрушки из очереди
      */
     public String getToyName() {
@@ -65,12 +84,17 @@ public class ToyDrawing<T extends Toy> {
      * Метод возвращает имя Игрушки из очереди.
      * Возвращается игрушка с наибольшим весом chance.
      * После происходит очистка очереди.
+     *
      * @return возвращает имя Игрушки из очереди
      */
     public T getToy() {
         T result = drawQueue.poll();
         drawQueue.clear();
+        setResults(result);
         return result;
+    }
+    public void clearResults() {
+        this.results = null;
     }
 
     public static void main(String[] args) {
@@ -84,7 +108,11 @@ public class ToyDrawing<T extends Toy> {
         inventory.putToy(third);
 
         ToyDrawing<Toy> d = new ToyDrawing<>(inventory.getToys());
-        d.setDrawing();
+        try {
+            d.setDrawing();
+        } catch (NotEnoughToys e) {
+            throw new RuntimeException(e);
+        }
         System.out.println(d.drawQueue.poll().getName());
 
         try (FileWriter fw = new FileWriter("test.txt")) {
@@ -105,4 +133,6 @@ public class ToyDrawing<T extends Toy> {
 
 
     }
+
+
 }

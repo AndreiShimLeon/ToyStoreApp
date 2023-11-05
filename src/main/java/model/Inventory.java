@@ -25,6 +25,10 @@ public class Inventory<T extends Toy> {
         return result;
     }
 
+    public boolean contains(int id){
+        return inventory.containsKey(id);
+    }
+
     @Override
     public String toString() {
         String result = "";

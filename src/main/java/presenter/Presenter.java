@@ -1,6 +1,8 @@
 package presenter;
 
 import model.Controller;
+import model.Exceptions.DrawResultIsEmpty;
+import model.Exceptions.NotEnoughToys;
 import model.Exceptions.WrongIDException;
 import model.Exporter;
 import model.Toy;
@@ -11,15 +13,13 @@ import view.Messages;
 public class Presenter {
     View view;
     Controller<Toy> controller;
-    Exporter<Toy> exporter;
 
-    public Presenter(View view, Controller<Toy> controller, Exporter<Toy> exporter) {
+    public Presenter(View view, Controller<Toy> controller) {
         this.view = view;
         this.controller = controller;
-        this.exporter = exporter;
     }
 
-    public void start() throws WrongIDException {
+    public void start() throws WrongIDException, DrawResultIsEmpty, NotEnoughToys {
         boolean flag = true;
         while (flag) {
             String choice = view.input(Messages.choiceMessage);
@@ -42,21 +42,33 @@ public class Presenter {
                                 view.print(Messages.successAddingToy);
                                 break;
                             case "2": // Отобразить текущий список
-                                view.print(controller.showInventory());
+                                if (controller.showInventory() != null) {
+                                    view.print(controller.showInventory());
+                                } else {
+                                    view.print(Messages.emptyInventory);
+                                }
                                 // todo:
                                 break;
                             case "3": // Удалить текущий список
-                                controller.clearInventory();
-                                view.print(Messages.clearedInventory);
+                                if (controller.clearInventory()) {
+                                    view.print(Messages.clearedInventory);
+                                } else {
+                                    view.print(Messages.emptyInventory);
+                                }
                                 // todo:
                                 break;
                             case "4": // Редактировать список
-                                // todo:
-                                int correctID = Integer.parseInt(view.input(Messages.correctId));
-                                String correctName = view.input(Messages.correctName);
-                                int correctChance = Integer.parseInt(view.input(Messages.correctChance));
-                                controller.correctToy(correctID, correctName, correctChance);
-                                view.print(Messages.correctedToy);
+                                if (controller.showInventory() == null) {
+                                    view.print(Messages.emptyInventory);
+                                } else {
+                                    int correctID = Integer.parseInt(view.input(Messages.correctId));
+                                    if (controller.toyInInventory(correctID)) {
+                                        String correctName = view.input(Messages.correctName);
+                                        int correctChance = Integer.parseInt(view.input(Messages.correctChance));
+                                        controller.correctToy(correctID, correctName, correctChance);
+                                        view.print(Messages.correctedToy);
+                                    } else throw new WrongIDException();
+                                }
                                 break;
                             case "5": // Возврат в меню
                                 inventoryFlag = false;
@@ -79,16 +91,20 @@ public class Presenter {
                         String resultsChoice = view.input(Messages.resultsOperations);
                         switch (resultsChoice) {
                             case "1": // Отображение текущих результатов
-                                //TODO: Отображение текущих результатов
+                                view.print(controller.showResults());
                                 break;
                             case "2": // Сохранение результатов в файл
-                                //TODO: Сохранение результатов в файл
+                                controller.saveResults();
+                                view.print(Messages.successSavedResults);
                                 break;
                             case "3": // Удаление текущих результатов
                                 //TODO: Удаление текущих результатов
+                                controller.deleteResults();
+                                view.print(Messages.successDeletedResults);
                                 break;
                             case "4": // Очистка файла
-                                //TODO: Очистка файла
+                                controller.clearFile();
+                                view.print(Messages.successClearedFile);
                                 break;
                             case "5": // Возврат в меню
                                 resultsFlag = false;
