@@ -1,10 +1,7 @@
 package presenter;
 
 import model.Controller;
-import model.Exceptions.DrawResultIsEmpty;
-import model.Exceptions.NotEnoughToys;
-import model.Exceptions.WrongIDException;
-import model.Exporter;
+import model.Exceptions.*;
 import model.Toy;
 import view.View;
 import view.Messages;
@@ -19,26 +16,19 @@ public class Presenter {
         this.controller = controller;
     }
 
-    public void start() throws WrongIDException, DrawResultIsEmpty, NotEnoughToys {
+    public void start() throws WrongIDException, DrawResultIsEmpty, NotEnoughToys, ToyAlreadyInTheList, IncorrectInput {
         boolean flag = true;
         while (flag) {
             String choice = view.input(Messages.choiceMessage);
             switch (choice) {
-                // TODO:          1. Управление списком игрушек;
-                //                2. Проведение розыгрыша;
-                //                3. Результаты розыгрыша;
-                //                4. Выйти.
                 case "1": // Управление списком игрушек
                     boolean inventoryFlag = true;
                     while (inventoryFlag) {
                         String inventoryChoice = view.input(Messages.editInventory);
                         switch (inventoryChoice) {
                             case "1": // Внесение игрушки в список
-                                // todo:
-                                String name = view.input(Messages.inputToyName);
-                                int id = Integer.parseInt(view.input(Messages.inputId));
-                                int chance = Integer.parseInt(view.input(Messages.inputChance));
-                                controller.addToy(id, chance, name);
+                                String toyInfo = view.input(Messages.inputToyString);
+                                controller.addToy(toyInfo);
                                 view.print(Messages.successAddingToy);
                                 break;
                             case "2": // Отобразить текущий список
@@ -47,7 +37,6 @@ public class Presenter {
                                 } else {
                                     view.print(Messages.emptyInventory);
                                 }
-                                // todo:
                                 break;
                             case "3": // Удалить текущий список
                                 if (controller.clearInventory()) {
@@ -55,7 +44,6 @@ public class Presenter {
                                 } else {
                                     view.print(Messages.emptyInventory);
                                 }
-                                // todo:
                                 break;
                             case "4": // Редактировать список
                                 if (controller.showInventory() == null) {
@@ -74,14 +62,12 @@ public class Presenter {
                                 inventoryFlag = false;
                                 break;
                         }
-
                     }
                     //TODO:
                     // Ошибки
                     break;
                 case "2": // Проведение розыгрыша
-                    view.print(Messages.winnerMessage);
-                    view.print(controller.showWinner(controller.draw()));
+                    view.print(Messages.winnerMessage + controller.showWinner(controller.draw()));
                     break;
                 case "3": // Операции с результатами розыгрыша
                     boolean resultsFlag = true;
@@ -100,7 +86,6 @@ public class Presenter {
                                 view.print(Messages.successLoadedResults);
                                 break;
                             case "4": // Удаление текущих результатов
-                                //TODO: Удаление текущих результатов
                                 controller.deleteResults();
                                 view.print(Messages.successDeletedResults);
                                 break;

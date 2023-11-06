@@ -1,26 +1,20 @@
 package model;
 
-import model.Exceptions.DrawResultIsEmpty;
-import model.Exceptions.NotEnoughToys;
-import model.Exceptions.WrongIDException;
+import model.Exceptions.*;
 
 public class Controller<T extends Toy> {
     private Inventory<T> inventory;
     private Exporter exporter;
     private ToyDrawing<T> drawing;
-
-    public Controller(Inventory<T> inventory) {
-        this.inventory = inventory;
-        this.exporter = new Exporter();
-    }
+    private StringParser stringParser;
 
     public Controller() {
         this.exporter = new Exporter();
         this.inventory = new Inventory<>();
+        this.stringParser = new StringParser();
     }
-
-    public void addToy(int id, int chance, String name) {
-        this.inventory.putToy((T) new Toy(id, name, chance));
+    public void addToy(String toyInfo) throws IncorrectInput, ToyAlreadyInTheList {
+        this.inventory.putToy((T) stringParser.parseStringToToy(toyInfo));
     }
 
     public T draw() throws NotEnoughToys {
@@ -57,13 +51,13 @@ public class Controller<T extends Toy> {
     }
 
     public void saveResults() throws DrawResultIsEmpty {
-        if (drawing == null || drawing.getResults().isBlank()) throw new DrawResultIsEmpty();
+        if (drawing == null || drawing.getResults() == null) throw new DrawResultIsEmpty();
         exporter.saveToFile(drawing.getResults());
         drawing.clearResults();
     }
 
     public void deleteResults() throws DrawResultIsEmpty {
-        if (drawing == null || drawing.getResults().isBlank()) throw new DrawResultIsEmpty();
+        if (drawing == null || drawing.getResults() == null) throw new DrawResultIsEmpty();
         drawing.clearResults();
     }
 

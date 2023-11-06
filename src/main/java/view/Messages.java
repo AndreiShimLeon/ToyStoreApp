@@ -14,9 +14,6 @@ public class Messages {
                         4. Редактировать список;
                         5. Возврат в меню.
                 """;
-
-        public static String drawingResult = "  Выйгрыш - ";
-        public static String inventoryInfo = "  В розыгрыше участвуют: ";
         public static String resultsOperations = """
                         1. Отобразить текущие результаты;
                         2. Сохранить текущие результаты в файл;
@@ -27,9 +24,7 @@ public class Messages {
                 """;
 
         public static String goodByeMessage = "Завершение работы.";
-        public static String inputId = "Введите ID игрушки: ";
-        public static String inputChance = "Введите шанс выпадения игрушки: ";
-        public static String inputToyName = "Введите название игрушки: ";
+        public static String inputToyString = "Введите данные игрушки в формате: <ID> <Шанс> <Название>";
         public static String successAddingToy = "Игрушка успешно добавлена в список для розыгрыша.";
         public static String successSavedResults = "Результаты розыгрыша успешно записаны в файл.";
         public static String successLoadedResults= "Результаты розыгрыша успешно загружены из файла.";
@@ -41,5 +36,5 @@ public class Messages {
         public static String correctName = "Введите новое имя игрушки: ";
         public static String correctChance = "Введите новый шанс выпадения игрушки: ";
         public static String correctedToy = "Информация об игрушке была успешно отредактирована.";
-        public static String winnerMessage = "В розыгрыше есть победитель!";
+        public static String winnerMessage = "В розыгрыше есть победитель!\n";
 }

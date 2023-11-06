@@ -1,8 +1,5 @@
 import model.Controller;
-import model.Exceptions.DrawResultIsEmpty;
-import model.Exceptions.NotEnoughToys;
-import model.Exceptions.WrongIDException;
-import model.Exporter;
+import model.Exceptions.*;
 import presenter.Presenter;
 import view.View;
 
@@ -16,6 +13,10 @@ public class Main {
         } catch (DrawResultIsEmpty e) {
             throw new RuntimeException(e);
         } catch (NotEnoughToys e) {
+            throw new RuntimeException(e);
+        } catch (ToyAlreadyInTheList e) {
+            throw new RuntimeException(e);
+        } catch (IncorrectInput e) {
             throw new RuntimeException(e);
         }
 

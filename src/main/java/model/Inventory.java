@@ -1,5 +1,6 @@
 package model;
 
+import model.Exceptions.ToyAlreadyInTheList;
 import model.Exceptions.WrongIDException;
 
 import java.util.ArrayList;
@@ -12,8 +13,8 @@ public class Inventory<T extends Toy> {
         this.inventory = new HashMap<>();
     }
 
-    public void putToy(T toy) {
-        if (inventory.containsKey(toy.getId())) return;
+    public void putToy(T toy) throws ToyAlreadyInTheList {
+        if (inventory.containsKey(toy.getId())) throw new ToyAlreadyInTheList();
         this.inventory.put(toy.getId(), toy);
     }
 
@@ -25,7 +26,7 @@ public class Inventory<T extends Toy> {
         return result;
     }
 
-    public boolean contains(int id){
+    public boolean contains(int id) {
         return inventory.containsKey(id);
     }
 
@@ -34,7 +35,7 @@ public class Inventory<T extends Toy> {
         String result = "";
         for (T toy : inventory.values()
         ) {
-            result+= "[" + toy.getId() + "] " +
+            result += "[" + toy.getId() + "] " +
                     toy.getName() +
                     ", шанс выпадения " + toy.getChance() +
                     '\n';
@@ -47,7 +48,7 @@ public class Inventory<T extends Toy> {
     }
 
     public void correctToy(int correctID, T toy) throws WrongIDException {
-        if (inventory.containsKey(correctID)){
+        if (inventory.containsKey(correctID)) {
             inventory.replace(correctID, toy);
         } else throw new WrongIDException();
     }
