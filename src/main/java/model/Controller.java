@@ -13,7 +13,7 @@ public class Controller<T extends Toy> {
         this.inventory = new Inventory<>();
         this.stringParser = new StringParser();
     }
-    public void addToy(String toyInfo) throws IncorrectInput, ToyAlreadyInTheList {
+    public void addToy(String toyInfo) throws IncorrectInput, ToyAlreadyInTheList, IdAlreadyExists {
         this.inventory.putToy((T) stringParser.parseStringToToy(toyInfo));
     }
 

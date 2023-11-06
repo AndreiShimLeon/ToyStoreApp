@@ -13,10 +13,15 @@ public class StringParser {
             throw new IncorrectInput();
         }
         String name = string[2];
+        boolean alphas = false;
         for (char c: name.toCharArray()
              ) {
-            if(!Character.isAlphabetic(c)) throw new IncorrectInput();
+            if(Character.isAlphabetic(c)) {
+                alphas = true;
+                break;
+            }
         }
+        if(!alphas) throw new IncorrectInput();
         return new Toy(id,name,chance);
     }
 }

@@ -1,5 +1,6 @@
 package model;
 
+import model.Exceptions.IdAlreadyExists;
 import model.Exceptions.ToyAlreadyInTheList;
 import model.Exceptions.WrongIDException;
 
@@ -13,8 +14,12 @@ public class Inventory<T extends Toy> {
         this.inventory = new HashMap<>();
     }
 
-    public void putToy(T toy) throws ToyAlreadyInTheList {
-        if (inventory.containsKey(toy.getId())) throw new ToyAlreadyInTheList();
+    public void putToy(T toy) throws ToyAlreadyInTheList, IdAlreadyExists {
+        if (inventory.containsKey(toy.getId())) throw new IdAlreadyExists();
+        for (int key :  inventory.keySet()
+             ) {
+            if(inventory.get(key).getName().equals(toy.getName())) throw new ToyAlreadyInTheList();
+        }
         this.inventory.put(toy.getId(), toy);
     }
 

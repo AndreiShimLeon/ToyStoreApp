@@ -23,9 +23,9 @@ public class Presenter {
                 String choice = view.input(Messages.choiceMessage);
                 try {
                     int choiceInt = Integer.parseInt(choice);
-                    if (choiceInt < 1 || choiceInt > 4) throw new IncorrectInput();
+                    if (choiceInt < 1 || choiceInt > 4) throw new WrongChoiceException();
                 } catch (NumberFormatException e) {
-                    throw new IncorrectInput();
+                    throw new WrongChoiceException();
                 }
                 switch (choice) {
                     case "1": // Управление списком игрушек
@@ -33,47 +33,59 @@ public class Presenter {
                         while (inventoryFlag) {
                             String inventoryChoice = view.input(Messages.editInventory);
                             try {
-                                int inventoryChoiceInt = Integer.parseInt(inventoryChoice);
-                                if (inventoryChoiceInt < 1 || inventoryChoiceInt > 5) throw new WrongChoiceException();
-                            } catch (NumberFormatException e) {
-                                throw new WrongChoiceException();
-                            }
-                            switch (inventoryChoice) {
-                                case "1": // Внесение игрушки в список
-                                    String toyInfo = view.input(Messages.inputToyString);
-                                    controller.addToy(toyInfo);
-                                    view.print(Messages.successAddingToy);
-                                    break;
-                                case "2": // Отобразить текущий список
-                                    if (controller.showInventory() != null) {
-                                        view.print(controller.showInventory());
-                                    } else {
-                                        view.print(Messages.emptyInventory);
-                                    }
-                                    break;
-                                case "3": // Удалить текущий список
-                                    if (controller.clearInventory()) {
-                                        view.print(Messages.clearedInventory);
-                                    } else {
-                                        view.print(Messages.emptyInventory);
-                                    }
-                                    break;
-                                case "4": // Редактировать список
-                                    if (controller.showInventory() == null) {
-                                        view.print(Messages.emptyInventory);
-                                    } else {
-                                        int correctID = Integer.parseInt(view.input(Messages.correctId));
-                                        if (controller.toyInInventory(correctID)) {
-                                            String correctName = view.input(Messages.correctName);
-                                            int correctChance = Integer.parseInt(view.input(Messages.correctChance));
-                                            controller.correctToy(correctID, correctName, correctChance);
-                                            view.print(Messages.correctedToy);
-                                        } else throw new WrongIDException();
-                                    }
-                                    break;
-                                case "5": // Возврат в меню
-                                    inventoryFlag = false;
-                                    break;
+                                try {
+                                    int inventoryChoiceInt = Integer.parseInt(inventoryChoice);
+                                    if (inventoryChoiceInt < 1 || inventoryChoiceInt > 5) throw new WrongChoiceException();
+                                } catch (NumberFormatException e){
+                                    throw new WrongChoiceException();
+                                }
+                                switch (inventoryChoice) {
+                                    case "1": // Внесение игрушки в список
+                                        String toyInfo = view.input(Messages.inputToyString);
+                                        controller.addToy(toyInfo);
+                                        view.print(Messages.successAddingToy);
+                                        break;
+                                    case "2": // Отобразить текущий список
+                                        if (controller.showInventory() != null) {
+                                            view.print(controller.showInventory());
+                                        } else {
+                                            view.print(Messages.emptyInventory);
+                                        }
+                                        break;
+                                    case "3": // Удалить текущий список
+                                        if (controller.clearInventory()) {
+                                            view.print(Messages.clearedInventory);
+                                        } else {
+                                            view.print(Messages.emptyInventory);
+                                        }
+                                        break;
+                                    case "4": // Редактировать список
+                                        if (controller.showInventory() == null) {
+                                            view.print(Messages.emptyInventory);
+                                        } else {
+                                            int correctID = Integer.parseInt(view.input(Messages.correctId));
+                                            if (controller.toyInInventory(correctID)) {
+                                                String correctName = view.input(Messages.correctName);
+                                                int correctChance = Integer.parseInt(view.input(Messages.correctChance));
+                                                controller.correctToy(correctID, correctName, correctChance);
+                                                view.print(Messages.correctedToy);
+                                            } else throw new WrongIDException();
+                                        }
+                                        break;
+                                    case "5": // Возврат в меню
+                                        inventoryFlag = false;
+                                        break;
+                                }
+                            } catch (IdAlreadyExists e) {
+                                view.print(e.getMessage());
+                            } catch (WrongIDException e) {
+                                view.print(e.getMessage());
+                            } catch (IncorrectInput e) {
+                                view.print(e.getMessage());
+                            } catch (WrongChoiceException e) {
+                                view.print(e.getMessage());
+                            } catch (ToyAlreadyInTheList e) {
+                                view.print(e.getMessage());
                             }
                         }
                         break;
@@ -85,8 +97,12 @@ public class Presenter {
                         while (resultsFlag) {
                             String resultsChoice = view.input(Messages.resultsOperations);
                             try {
-                                int resultsChoiceInt = Integer.parseInt(resultsChoice);
-                                if (resultsChoiceInt < 1 || resultsChoiceInt > 6) throw new WrongChoiceException();
+                                try {
+                                    int resultsChoiceInt = Integer.parseInt(resultsChoice);
+                                    if (resultsChoiceInt < 1 || resultsChoiceInt > 6) throw new WrongChoiceException();
+                                } catch (NumberFormatException e) {
+                                    throw new WrongChoiceException();
+                                }
                                 switch (resultsChoice) {
                                     case "1": // Отображение текущих результатов
                                         view.print(controller.showResults());
@@ -111,11 +127,11 @@ public class Presenter {
                                         resultsFlag = false;
                                         break;
                                 }
-                            } catch (NumberFormatException e) {
-                                throw new WrongChoiceException();
-                            } catch (DrawResultIsEmpty e){
+                            }catch (DrawResultIsEmpty e) {
                                 view.print(e.getMessage());
-                            } catch (EmptyResultFileException e){
+                            } catch (EmptyResultFileException e) {
+                                view.print(e.getMessage());
+                            } catch (WrongChoiceException e) {
                                 view.print(e.getMessage());
                             }
                         }
@@ -125,15 +141,9 @@ public class Presenter {
                         view.print(Messages.goodByeMessage);
                         break;
                 }
-            } catch (IncorrectInput e) {
-                view.print(e.getMessage());
             } catch (NotEnoughToys e) {
                 view.print(e.getMessage());
-            } catch (ToyAlreadyInTheList e) {
-                view.print(e.getMessage());
             } catch (WrongChoiceException e) {
-                view.print(e.getMessage());
-            } catch (WrongIDException e) {
                 view.print(e.getMessage());
             }
         }
