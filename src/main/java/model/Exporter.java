@@ -1,8 +1,9 @@
 package model;
 
+import model.Exceptions.EmptyResultFileException;
+
 import java.io.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class Exporter {
     public void saveToFile(String results) throws RuntimeException {
@@ -23,15 +24,19 @@ public class Exporter {
         }
     }
 
-    public String loadFile() throws RuntimeException {
+    public String loadFile() throws RuntimeException, EmptyResultFileException {
         String result = "";
+        boolean emptyFlag = true;
         try (BufferedReader br = new BufferedReader(new FileReader("winners.csv"))) {
             while (br.ready()) {
-                result += br.readLine() + '\n';
+                String line = br.readLine();
+                if(!line.isBlank()) emptyFlag = false;
+                result += line + '\n';
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        if(emptyFlag) throw new EmptyResultFileException();
         return result;
     }
 }

@@ -65,7 +65,7 @@ public class Controller<T extends Toy> {
         exporter.clearFile();
     }
 
-    public void loadResults() {
+    public void loadResults() throws EmptyResultFileException {
         if (drawing == null) this.drawing = new ToyDrawing<>();
         drawing.loadResults(exporter.loadFile());
     }
