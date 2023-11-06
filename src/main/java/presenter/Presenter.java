@@ -35,8 +35,9 @@ public class Presenter {
                             try {
                                 try {
                                     int inventoryChoiceInt = Integer.parseInt(inventoryChoice);
-                                    if (inventoryChoiceInt < 1 || inventoryChoiceInt > 5) throw new WrongChoiceException();
-                                } catch (NumberFormatException e){
+                                    if (inventoryChoiceInt < 1 || inventoryChoiceInt > 5)
+                                        throw new WrongChoiceException();
+                                } catch (NumberFormatException e) {
                                     throw new WrongChoiceException();
                                 }
                                 switch (inventoryChoice) {
@@ -90,7 +91,45 @@ public class Presenter {
                         }
                         break;
                     case "2": // Проведение розыгрыша
-                        view.print(Messages.winnerMessage + controller.showWinner(controller.draw()));
+                        boolean drawFlag = true;
+                        while (drawFlag) {
+                            try {
+                                String drawChoice = view.input(Messages.drawChoice);
+                                try {
+                                    int drawChoiceInt = Integer.parseInt(drawChoice);
+                                    if (drawChoiceInt < 1 || drawChoiceInt > 5) throw new WrongChoiceException();
+                                } catch (NumberFormatException e) {
+                                    throw new WrongChoiceException();
+                                }
+                                switch (drawChoice) {
+                                    case "1":
+                                        view.print(Messages.winnerMessage + controller.showWinner(controller.draw()));
+                                        break;
+                                    case "2":
+                                        for (int i = 0; i < 5; i++) {
+                                            view.print(Messages.winnerMessage + controller.showWinner(controller.draw()));
+                                        }
+                                        break;
+                                    case "3":
+                                        for (int i = 0; i < 10; i++) {
+                                            view.print(Messages.winnerMessage + controller.showWinner(controller.draw()));
+                                        }
+                                        break;
+                                    case "4":
+                                        for (int i = 0; i < 100; i++) {
+                                            view.print(Messages.winnerMessage + controller.showWinner(controller.draw()));
+                                        }
+                                        break;
+                                    case "5":
+                                        drawFlag = false;
+                                        break;
+                                }
+                            } catch (WrongChoiceException e) {
+                                view.print(e.getMessage());
+                            } catch (NotEnoughToys e){
+                                view.print(e.getMessage());
+                            }
+                        }
                         break;
                     case "3": // Операции с результатами розыгрыша
                         boolean resultsFlag = true;
@@ -127,7 +166,7 @@ public class Presenter {
                                         resultsFlag = false;
                                         break;
                                 }
-                            }catch (DrawResultIsEmpty e) {
+                            } catch (DrawResultIsEmpty e) {
                                 view.print(e.getMessage());
                             } catch (EmptyResultFileException e) {
                                 view.print(e.getMessage());
@@ -141,8 +180,6 @@ public class Presenter {
                         view.print(Messages.goodByeMessage);
                         break;
                 }
-            } catch (NotEnoughToys e) {
-                view.print(e.getMessage());
             } catch (WrongChoiceException e) {
                 view.print(e.getMessage());
             }
