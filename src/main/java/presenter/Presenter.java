@@ -80,10 +80,8 @@ public class Presenter {
                     // Ошибки
                     break;
                 case "2": // Проведение розыгрыша
-                    controller.draw();
-                    //TODO: Проведение розыгрыша,
-                    // если список игрушек не пустой
-                    // (или только одна игрушка в списке)
+                    view.print(Messages.winnerMessage);
+                    view.print(controller.showWinner(controller.draw()));
                     break;
                 case "3": // Операции с результатами розыгрыша
                     boolean resultsFlag = true;
@@ -97,16 +95,20 @@ public class Presenter {
                                 controller.saveResults();
                                 view.print(Messages.successSavedResults);
                                 break;
-                            case "3": // Удаление текущих результатов
+                            case "3": // Загрузка результатов из файла
+                                controller.loadResults();
+                                view.print(Messages.successLoadedResults);
+                                break;
+                            case "4": // Удаление текущих результатов
                                 //TODO: Удаление текущих результатов
                                 controller.deleteResults();
                                 view.print(Messages.successDeletedResults);
                                 break;
-                            case "4": // Очистка файла
+                            case "5": // Очистка файла
                                 controller.clearFile();
                                 view.print(Messages.successClearedFile);
                                 break;
-                            case "5": // Возврат в меню
+                            case "6": // Возврат в меню
                                 resultsFlag = false;
                                 break;
                         }

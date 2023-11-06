@@ -20,9 +20,10 @@ public class Messages {
         public static String resultsOperations = """
                         1. Отобразить текущие результаты;
                         2. Сохранить текущие результаты в файл;
-                        3. Удалить текущие результаты;
-                        4. Очистить файл;
-                        5. Возврат в меню.
+                        3. Загрузить результаты из файла;
+                        4. Удалить текущие результаты;
+                        5. Очистить файл;
+                        6. Возврат в меню.
                 """;
 
         public static String goodByeMessage = "Завершение работы.";
@@ -31,6 +32,7 @@ public class Messages {
         public static String inputToyName = "Введите название игрушки: ";
         public static String successAddingToy = "Игрушка успешно добавлена в список для розыгрыша.";
         public static String successSavedResults = "Результаты розыгрыша успешно записаны в файл.";
+        public static String successLoadedResults= "Результаты розыгрыша успешно загружены из файла.";
         public static String successDeletedResults = "Результаты розыгрыша успешно удалены.";
         public static String successClearedFile = "Файл с результатами успешно очищен.";
         public static String clearedInventory = "Список игрушек для розыгрыша был успешно очищен.";
@@ -39,4 +41,5 @@ public class Messages {
         public static String correctName = "Введите новое имя игрушки: ";
         public static String correctChance = "Введите новый шанс выпадения игрушки: ";
         public static String correctedToy = "Информация об игрушке была успешно отредактирована.";
+        public static String winnerMessage = "В розыгрыше есть победитель!";
 }

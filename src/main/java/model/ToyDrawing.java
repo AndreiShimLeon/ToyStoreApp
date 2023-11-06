@@ -9,6 +9,7 @@ import java.util.PriorityQueue;
 import java.util.Random;
 
 public class ToyDrawing<T extends Toy> {
+    private int id = 1;
     private PriorityQueue<T> drawQueue;
     private ArrayList<T> inventory;
 
@@ -18,11 +19,25 @@ public class ToyDrawing<T extends Toy> {
         return results;
     }
 
+    public void setInventory(ArrayList<T> inventory) {
+        this.inventory = inventory;
+    }
+
+    public void loadResults(String results) {
+        if(this.results == null){
+            this.results = results;
+        } else{
+            this.results += results;
+        }
+    }
+
     public void setResults(T winnerToy) {
+        String result = "["+id+"] "+ winnerToy.getName() + '\n';
+        this.id++;
         if (results == null) {
-            this.results = winnerToy.getName() + '\n';
+            this.results = result;
         } else {
-            this.results += winnerToy.getName() + '\n';
+            this.results += result;
         }
     }
 
@@ -96,43 +111,5 @@ public class ToyDrawing<T extends Toy> {
     public void clearResults() {
         this.results = null;
     }
-
-    public static void main(String[] args) {
-
-        Toy first = new Toy(1, "Robot", 30);
-        Toy second = new Toy(2, "Car", 20);
-        Toy third = new Toy(3, "Kitten", 50);
-        Inventory<Toy> inventory = new Inventory<>();
-        inventory.putToy(first);
-        inventory.putToy(second);
-        inventory.putToy(third);
-
-        ToyDrawing<Toy> d = new ToyDrawing<>(inventory.getToys());
-        try {
-            d.setDrawing();
-        } catch (NotEnoughToys e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(d.drawQueue.poll().getName());
-
-        try (FileWriter fw = new FileWriter("test.txt")) {
-            for (int i = 0; i < 100; i++) {
-                d.setDrawing();
-                String queue = "";
-                for (Toy toy : d.drawQueue
-                ) {
-                    queue += toy.getName() + ":" + toy.getChance() + " ";
-
-                }
-                String result = d.getToyName();
-                fw.write(result + " in queue: " + queue + '\n');
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
-
 
 }

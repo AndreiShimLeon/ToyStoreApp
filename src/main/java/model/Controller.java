@@ -27,6 +27,7 @@ public class Controller<T extends Toy> {
         if (this.drawing == null) {
             this.drawing = new ToyDrawing<>(inventory.getToys());
         }
+        this.drawing.setInventory(this.inventory.getToys());
         this.drawing.setDrawing();
         return drawing.getToy();
     }
@@ -68,5 +69,14 @@ public class Controller<T extends Toy> {
 
     public void clearFile() {
         exporter.clearFile();
+    }
+
+    public void loadResults() {
+        if (drawing == null) this.drawing = new ToyDrawing<>();
+        drawing.loadResults(exporter.loadFile());
+    }
+
+    public String showWinner(T winner) {
+        return winner.toString();
     }
 }

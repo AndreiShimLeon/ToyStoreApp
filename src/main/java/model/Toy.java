@@ -1,6 +1,6 @@
 package model;
 
-public class Toy implements Comparable<Toy>{
+public class Toy implements Comparable<Toy> {
     private int id;
     private String name;
     private int chance;
@@ -37,7 +37,15 @@ public class Toy implements Comparable<Toy>{
     }
 
     @Override
+    public String toString() {
+        return "Игрушка " +
+                "[" + id +
+                "] " + name +
+                ", шанс выпадения " + chance;
+    }
+
+    @Override
     public int compareTo(Toy o) {
-        return o.chance-this.chance;
+        return o.chance - this.chance;
     }
 }
